@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Projects — Kanishk Patel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    /* ── Filter bar ── */
+    .filter-bar {
+      display:flex;gap:0.5rem;flex-wrap:wrap;
+      padding:1.5rem 6vw;
+      background:var(--surface);
+      border-bottom:1px solid var(--border);
+    }
+    .filter-btn {
+      font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;
+      padding:0.35rem 0.9rem;border-radius:100px;
+      border:1px solid var(--border);color:var(--muted);background:transparent;cursor:pointer;
+      transition:all 0.2s;
+    }
+    .filter-btn:hover,.filter-btn.active { background:var(--accent2);border-color:var(--accent2);color:#000; }
+
+    /* ── Projects grid ── */
+    .projects-grid {
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.8rem;
+    }
+
+    .project-card {
+      background:var(--card);border:1px solid var(--border);border-radius:16px;
+      padding:2rem;display:flex;flex-direction:column;
+      transition:border-color 0.3s,transform 0.3s;position:relative;overflow:hidden;
+      text-decoration:none;color:inherit;
+      opacity:0;transform:translateY(20px);
+      animation:fadeUp 0.6s ease forwards;
+    }
+    .project-card:nth-child(1){animation-delay:0.05s}
+    .project-card:nth-child(2){animation-delay:0.12s}
+    .project-card:nth-child(3){animation-delay:0.19s}
+    .project-card:nth-child(4){animation-delay:0.26s}
+    .project-card:nth-child(5){animation-delay:0.33s}
+    .project-card::after {
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg,rgba(255,107,53,0.04),rgba(0,229,255,0.04));
+      opacity:0;transition:opacity 0.3s;
+    }
+    .project-card:hover { border-color:var(--accent1);transform:translateY(-6px); }
+    .project-card:hover::after { opacity:1; }
+    .project-card.hidden { display:none; }
+
+    .project-header {
+      display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;
+    }
+    .project-icon {
+      font-size:1.5rem;background:var(--surface);border-radius:10px;
+      width:48px;height:48px;display:flex;align-items:center;justify-content:center;
+      border:1px solid var(--border);
+    }
+    .project-link-icon { color:var(--muted);font-size:1.1rem;transition:color 0.2s; }
+    .project-card:hover .project-link-icon { color:var(--accent2); }
+    .project-name {
+      font-family:'Syne',sans-serif;font-weight:700;font-size:1.15rem;letter-spacing:-0.02em;
+      margin-bottom:0.6rem;color:var(--text);
+    }
+    .project-desc {
+      color:var(--muted);font-size:0.9rem;line-height:1.65;flex:1;margin-bottom:1.5rem;
+    }
+    .project-tags { display:flex;flex-wrap:wrap;gap:0.4rem; }
+
+    /* ── Featured badge ── */
+    .featured-badge {
+      position:absolute;top:1rem;right:1rem;
+      font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;
+      padding:0.2rem 0.5rem;border-radius:4px;
+      background:rgba(255,107,53,0.15);border:1px solid rgba(255,107,53,0.4);color:var(--accent1);
+    }
+
+    /* ── Colab card ── */
+    .colab-card {
+      border-color:rgba(255,107,53,0.3);
+      background:linear-gradient(135deg,var(--card),rgba(255,107,53,0.05));
+    }
+
+    @media(max-width:768px){
+      .projects-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-trail" id="cursorTrail"></div>
+
+  <nav>
+    <a class="nav-logo" href="../index.html">KP</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="skills.html">Skills</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+
+    <!-- Page hero -->
+    <div class="page-hero">
+      <div class="page-hero-orb" style="width:350px;height:350px;background:var(--accent1);bottom:-80px;right:5vw;"></div>
+      <div class="section-label reveal">Work</div>
+      <h1 class="reveal d1">What I've<br/><span>Built</span></h1>
+      <p class="reveal d2">5 projects spanning ML, robotics, and physics-based simulation.</p>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="ml">Machine Learning</button>
+      <button class="filter-btn" data-filter="robotics">Robotics</button>
+      <button class="filter-btn" data-filter="simulation">Simulation</button>
+    </div>
+
+    <!-- Grid -->
+    <div class="section-shell">
+      <div class="projects-grid" id="projectsGrid">
+
+        <!-- Project 1 -->
+        <a class="project-card" href="https://github.com/KanishkPatel0206/2-degree-arm-with-camera-sensor" target="_blank" data-cat="robotics">
+          <span class="featured-badge">Featured</span>
+          <div class="project-header">
+            <div class="project-icon">🦾</div>
+            <span class="project-link-icon">↗</span>
+          </div>
+          <div class="project-name">2-DOF Arm with Camera Sensor</div>
+          <div class="project-desc">
+            Full ROS 2 simulation of a 2-degree-of-freedom robotic arm with an onboard camera sensor. The arm follows a square trajectory in Gazebo Ignition Fortress while streaming live camera data, with real-time TF visualization in RViz2. Clean URDF/Xacro robot description with launch files.
+          </div>
+          <div class="project-tags">
+            <span class="project-tag orange">ROS 2</span>
+            <span class="project-tag">Python</span>
+            <span class="project-tag purple">Gazebo</span>
+            <span class="project-tag green">Robotics</span>
+            <span class="project-tag">URDF</span>
+          </div>
+        </a>
+
+        <!-- Project 2 -->
+        <a class="project-card" href="https://github.com/KanishkPatel0206/Logistic_Regression_in_python" target="_blank" data-cat="ml">
+          <div class="project-header">
+            <div class="project-icon">🔬</div>
+            <span class="project-link-icon">↗</span>
+          </div>
+          <div class="project-name">Breast Cancer Classification</div>
+          <div class="project-desc">
+            Binary classification of breast cancer tumours (benign vs malignant) using Logistic Regression on the Wisconsin dataset. Achieves ~97% test accuracy with a full confusion matrix, precision/recall breakdown, and feature importance visualizations.
+          </div>
+          <div class="project-tags">
+            <span class="project-tag orange">Python</span>
+            <span class="project-tag">scikit-learn</span>
+            <span class="project-tag purple">ML</span>
+            <span class="project-tag">97% Accuracy</span>
+          </div>
+        </a>
+
+        <!-- Project 3 -->
+        <a class="project-card" href="https://github.com/KanishkPatel0206/Matlab_2dof_arm_simulation" target="_blank" data-cat="robotics simulation">
+          <div class="project-header">
+            <div class="project-icon">📐</div>
+            <span class="project-link-icon">↗</span>
+          </div>
+          <div class="project-name">MATLAB 2-DOF Arm Simulation</div>
+          <div class="project-desc">
+            MATLAB/Simulink simulation of a 2-DOF robotic arm with sine and square wave trajectory tracking. Demonstrates joint kinematics, forward dynamics, and real-time scope visualization in a physics-based environment.
+          </div>
+          <div class="project-tags">
+            <span class="project-tag orange">MATLAB</span>
+            <span class="project-tag purple">Simulink</span>
+            <span class="project-tag green">Robotics</span>
+          </div>
+        </a>
+
+        <!-- Project 4 -->
+        <a class="project-card" href="https://github.com/KanishkPatel0206/Shaper-Mechanism-Quick-Return-Simulation" target="_blank" data-cat="simulation">
+          <div class="project-header">
+            <div class="project-icon">⚙️</div>
+            <span class="project-link-icon">↗</span>
+          </div>
+          <div class="project-name">Shaper Mechanism Quick-Return Simulation</div>
+          <div class="project-desc">
+            Kinematic simulation of a quick-return shaper mechanism in MATLAB R2025b Simscape Multibody. Models a six-link chain converting rotary to asymmetric reciprocating motion. Full position, velocity, and acceleration analysis over multiple crank cycles.
+          </div>
+          <div class="project-tags">
+            <span class="project-tag orange">MATLAB</span>
+            <span class="project-tag">Simscape</span>
+            <span class="project-tag purple">Kinematics</span>
+            <span class="project-tag green">Mech. Eng.</span>
+          </div>
+        </a>
+
+        <!-- Project 5 -->
+        <a class="project-card colab-card" href="https://colab.research.google.com/drive/1TvGqxHJXxsA8kyIApXnBq0BJt93Fsd5Q#scrollTo=4vfdDXSUianq" target="_blank" data-cat="ml">
+          <div class="project-header">
+            <div class="project-icon">📒</div>
+            <span class="project-link-icon">↗</span>
+          </div>
+          <div class="project-name">ML Notebook — Google Colab</div>
+          <div class="project-desc">
+            An interactive Jupyter/Colab notebook documenting machine learning experiments with annotated code, inline visualizations, and reproducible results. Explore datasets, train models, and visualize outcomes directly in the browser.
+          </div>
+          <div class="project-tags">
+            <span class="project-tag orange">Colab</span>
+            <span class="project-tag">Python</span>
+            <span class="project-tag purple">ML</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- More coming -->
+    <div class="section-shell surface" style="text-align:center;padding:3rem 6vw;">
+      <p style="color:var(--muted);font-size:0.9rem;margin-bottom:1.2rem;font-family:'DM Mono',monospace;letter-spacing:0.08em;">MORE PROJECTS COMING SOON</p>
+      <a href="contact.html" class="btn-outline">Collaborate with me →</a>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 <b>Kanishk Patel</b></span>
+    <div class="footer-links">
+      <a href="../index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="skills.html">Skills</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <span>GitHub Pages</span>
+  </footer>
+
+  <script src="../css/main.js"></script>
+  <script>
+    // Filter
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        document.querySelectorAll('.project-card').forEach(card => {
+          const cats = card.dataset.cat || '';
+          card.classList.toggle('hidden', f !== 'all' && !cats.includes(f));
+        });
+      });
+    });
+  </script>
+</body>
+</html>
